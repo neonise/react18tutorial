@@ -1,24 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 
 // import "./index.css";
+const url = "https://api.github.com/users/parvizwpf";
 
 const Comp = () => {
-  const [count, setCount] = useState(0);
+  const [user, setUser] = useState({});
 
-  const handleClick = () => {
-    setCount(count + 1);
-  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const resp = await fetch(url);
+        const usr = await resp.json();
+        setUser(usr);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
-    <>
-      <div>
-        <h4>You clicked {count} times!</h4>
-        <button type="button" onClick={handleClick}>
-          Click
-        </button>
-      </div>
-    </>
+    <div>
+      <img src={user.avatar_url} width="150px" />
+      <h2>{user.name}</h2>
+      <h4>work at: {user.company}</h4>
+      <p>{user.bio}</p>
+    </div>
   );
 };
 
